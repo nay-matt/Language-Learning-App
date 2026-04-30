@@ -34,6 +34,10 @@
                             <a class="btn btn-sm btn-outline-info" asp-page="/Flashcards/Index" asp-route-deckId="@item.DeckID">View Cards</a>
                             <a class="btn btn-sm btn-outline-success" asp-page="/Flashcards/Create" asp-route-deckId="@item.DeckID">Add Card</a>
                             <a class="btn btn-sm btn-outline-warning" asp-page="./Edit" asp-route-id="@item.DeckID">Edit</a>
+							<form method="post" asp-page-handler="ResetDeck" asp-route-deckId="@item.DeckID"
+								  onsubmit="return confirm('Reset all progress for this deck?');">
+								<button class="btn btn-sm btn-outline-danger">Reset Progress</button>
+							</form>
                             <a class="btn btn-sm btn-outline-danger" asp-page="./Delete" asp-route-id="@item.DeckID">Delete</a>
                         </div>
                     </td>

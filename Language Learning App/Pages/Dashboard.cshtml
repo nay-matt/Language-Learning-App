@@ -1,0 +1,42 @@
+﻿@page
+@model Language_Learning_App.Pages.DashboardModel
+@{
+    ViewData["Title"] = "Study Dashboard";
+}
+
+<h1>Daily Progress</h1>
+<p class="text-muted">Here is a summary of your decks and cards due for review.</p>
+
+<div class="row mt-4">
+    @if (!Model.DeckStatuses.Any())
+    {
+        <div class="col-12">
+            <div class="alert alert-info">
+                You haven't created any decks yet! Head over to the Languages page to get started.
+            </div>
+        </div>
+    }
+    else
+    {
+        @foreach (var item in Model.DeckStatuses)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card @(item.CardsDueToday > 0 ? "border-warning" : "border-success")">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.DeckName</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@item.Language</h6>
+                        <hr />
+                        <p class="card-text">
+                            <strong>Total Cards:</strong> @item.TotalCards <br />
+                            <strong>Due for Review:</strong>
+                            <span class="badge @(item.CardsDueToday > 0 ? "bg-danger" : "bg-success")">
+                                @item.CardsDueToday
+                            </span>
+                        </p>
+                        <a asp-page="/Flashcards/Index" asp-route-deckId="@item.DeckID" class="btn btn-primary btn-sm">View Cards</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

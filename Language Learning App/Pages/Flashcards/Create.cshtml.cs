@@ -67,8 +67,8 @@ namespace Language_Learning_App.Pages.Flashcards
 
             _context.Flashcards.Add(Flashcard);
             await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index", new { deckId = Flashcard.DeckID });
+            TempData["SuccessMessage"] = "Card saved successfully! Add another?";
+            return RedirectToPage("./Create", new { deckId = Flashcard.DeckID });
         }
     }
 }
