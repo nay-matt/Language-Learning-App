@@ -1,0 +1,36 @@
+﻿@page
+@model Language_Learning_App.Pages.Flashcards.CreateModel
+
+<h1>Create New Card</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <input type="hidden" asp-for="Flashcard.DeckID" />
+
+            <div class="form-group mb-3">
+                <label asp-for="Flashcard.FrontText" class="control-label">Front (Question)</label>
+                <input asp-for="Flashcard.FrontText" class="form-control" />
+                <span asp-validation-for="Flashcard.FrontText" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Flashcard.BackText" class="control-label">Back (Answer)</label>
+                <input asp-for="Flashcard.BackText" class="form-control" />
+                <span asp-validation-for="Flashcard.BackText" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label">Tags (separated by commas)</label>
+                <input asp-for="TagInput" class="form-control" placeholder="Spanish, Verb, Chapter1" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create Card" class="btn btn-primary" />
+                <a asp-page="Index" asp-route-deckId="@Model.Flashcard.DeckID" class="btn btn-secondary">Back to Deck</a>
+            </div>
+        </form>
+    </div>
+</div>

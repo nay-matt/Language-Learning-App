@@ -1,0 +1,50 @@
+﻿@page
+@model Language_Learning_App.Pages.Decks.IndexModel
+
+@{
+    ViewData["Title"] = "My Decks";
+}
+
+<h1>My Decks</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New Deck</a>
+</p>
+
+<table class="table table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Deck Name</th>
+            <th>Language</th>
+            <th class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Decks != null && Model.Decks.Any())
+        {
+            @foreach (var item in Model.Decks)
+            {
+                <tr>
+                    <td class="align-middle">@item.Name</td>
+                    
+                    <td class="align-middle">@item.Language?.Name</td>
+                    
+                    <td class="text-center">
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-sm btn-outline-info" asp-page="/Flashcards/Index" asp-route-deckId="@item.DeckID">View Cards</a>
+                            <a class="btn btn-sm btn-outline-success" asp-page="/Flashcards/Create" asp-route-deckId="@item.DeckID">Add Card</a>
+                            <a class="btn btn-sm btn-outline-warning" asp-page="./Edit" asp-route-id="@item.DeckID">Edit</a>
+                            <a class="btn btn-sm btn-outline-danger" asp-page="./Delete" asp-route-id="@item.DeckID">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3" class="text-center text-muted">No decks found.</td>
+            </tr>
+        }
+    </tbody>
+</table>

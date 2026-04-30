@@ -1,0 +1,78 @@
+﻿@page
+@model Language_Learning_App.Pages.Flashcards.DetailsModel
+
+@{
+    ViewData["Title"] = "Card Details";
+
+    // Helper logic for Mastery Badge
+    string masteryLevel = "New";
+    string badgeClass = "bg-secondary";
+
+    if (Model.CurrentReview != null)
+    {
+        if (Model.CurrentReview.TimesReviewed == 0) { masteryLevel = "New"; }
+        else if (Model.CurrentReview.EaseFactor < 1.7) { masteryLevel = "Struggling"; badgeClass = "bg-danger"; }
+        else if (Model.CurrentReview.EaseFactor < 2.4) { masteryLevel = "Learning"; badgeClass = "bg-warning text-dark"; }
+        else { masteryLevel = "Mastered"; badgeClass = "bg-success"; }
+    }
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Flashcard Stats</h1>
+        <span class="badge rounded-pill @badgeClass p-2 px-3 h5">@masteryLevel</span>
+    </div>
+    <hr />
+    
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body">
+                    <h6 class="text-uppercase text-muted small fw-bold">Front (Question)</h6>
+                    <p class="display-6 mb-4">@Model.Flashcard.FrontText</p>
+                    
+                    <div class="border-top pt-3">
+                        <h6 class="text-uppercase text-muted small fw-bold">Back (Answer)</h6>
+                        <p class="display-6 text-primary">@Model.Flashcard.BackText</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card shadow-sm border-0 bg-light">
+                <div class="card-header bg-dark text-white fw-bold">Spaced Repetition Stats</div>
+                <div class="card-body">
+                    @if (Model.CurrentReview != null)
+                    {
+                        <div class="mb-3">
+                            <label class="text-muted small d-block">Next Review Scheduled</label>
+                            <strong>@Model.CurrentReview.NextReviewDate.ToString("MMMM dd, yyyy")</strong>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-muted small d-block">Interval between reviews</label>
+                            <strong>@Model.CurrentReview.Interval days</strong>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-muted small d-block">Times Reviewed</label>
+                            <strong>@Model.CurrentReview.TimesReviewed</strong>
+                        </div>
+                        <div>
+                            <label class="text-muted small d-block">Ease Factor (Current Multiplier)</label>
+                            <strong>@Model.CurrentReview.EaseFactor.ToString("0.00")</strong>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted italic">No review history found for this card.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-page="./Edit" asp-route-id="@Model.Flashcard.FlashcardID" class="btn btn-warning">Edit Card</a>
+        <a asp-page="./Index" asp-route-deckId="@Model.Flashcard.DeckID" class="btn btn-outline-secondary ms-2">Back to Deck</a>
+    </div>
+</div>

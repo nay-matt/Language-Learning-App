@@ -1,0 +1,49 @@
+﻿@page
+@model Language_Learning_App.Pages.Flashcards.IndexModel
+<div class="row">
+    @foreach (var item in Model.Flashcards)
+    {
+        var review = item.FlashcardReviews.FirstOrDefault();
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-muted small">Front</h5>
+                    <p class="h5">@item.FrontText</p>
+                    <hr /> <h5 class="card-title text-muted small">Back</h5>
+                    <p class="h5 text-primary">@item.BackText</p>
+                </div>
+                <div>
+                    @foreach (var tag in item.Tags)
+                    {
+                        <span class="badge bg-info text-dark">#@tag.Name</span>
+                    }
+                </div>
+                <div class="card-footer bg-light">
+                    <div class="row text-center small">
+                        <div class="col-6 border-right">
+                            <span class="d-block text-muted">Last Review</span>
+                            <strong>@(review?.LastReviewed.ToShortDateString() ?? "Never")</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="d-block text-muted">Next Review</span>
+                            <strong class="@(review?.NextReviewDate <= DateTime.Now ? "text-danger" : "text-success")">
+                                @(review?.NextReviewDate.ToShortDateString() ?? "Pending")
+                            </strong>
+                        </div>
+                    </div>
+                    <div class="text-center mt-2 small">
+                        <span class="badge badge-info">Ease: @review?.EaseFactor.ToString("0.0")</span>
+                        <span class="badge badge-secondary">Interval: @review?.Interval days</span>
+                    </div>
+                </div>
+                
+                <div class="card-footer text-center">
+                    <a asp-page="./Edit" asp-route-id="@item.FlashcardID" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <a asp-page="./Details" asp-route-id="@item.FlashcardID" class="btn btn-sm btn-outline-info">Details</a>
+                    <a asp-page="./Delete" asp-route-id="@item.FlashcardID" class="btn btn-sm btn-outline-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

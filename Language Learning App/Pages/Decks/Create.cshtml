@@ -1,0 +1,18 @@
+﻿@page
+@model Language_Learning_App.Pages.Decks.CreateModel
+
+<h1>Create Deck</h1>
+
+<form method="post">
+	<div>
+		<label>Name:</label>
+		<input asp-for="Deck.Name" />
+	</div>
+	<div>
+		<label>Language</label>
+		<select asp-for="Deck.LanguageID" asp-items="Model.LanguageList">
+			<option value="">-- Select a Language --</option>
+		</select>
+	</div>
+	<button type="submit">Save</button>
+</form>

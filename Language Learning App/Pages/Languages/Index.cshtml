@@ -1,0 +1,12 @@
+﻿@page
+@model Language_Learning_App.Pages.Languages.IndexModel
+
+<h1>Languages</h1>
+<a href="/Languages/Create">Create a New Language</a>
+
+<ul>
+    @foreach (var lang in Model.Languages)
+    {
+        <li>@lang.Name</li>
+    }
+</ul>

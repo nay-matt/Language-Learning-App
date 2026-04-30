@@ -1,0 +1,57 @@
+﻿@page
+@model Language_Learning_App.Pages.StudyModel
+@{
+    ViewData["Title"] = "Study Session";
+}
+
+<div class="container text-center mt-5">
+    @if (Model.CurrentReview == null)
+    {
+        <div class="alert alert-success">
+            <h3>🎉 You're all caught up!</h3>
+            <p>No more cards due for review today.</p>
+            <a asp-page="/Index" class="btn btn-primary">Back Home</a>
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">Cards remaining: @Model.RemainingCount</p>
+
+        @* Flashcard UI *@
+        <div class="card mx-auto shadow-lg" style="max-width: 500px; min-height: 300px; cursor: pointer;" onclick="flipCard()">
+            <div class="card-body d-flex align-items-center justify-content-center">
+                <div id="cardFront">
+                    <h2 class="display-4">@Model.CurrentReview.Flashcard.FrontText</h2>
+                    <p class="text-muted mt-3">(Click to flip)</p>
+                </div>
+                <div id="cardBack" style="display: none;">
+                    <h2 class="display-4 text-primary">@Model.CurrentReview.Flashcard.BackText</h2>
+                </div>
+            </div>
+        </div>
+
+        @* Rating Buttons (Hidden until flipped) *@
+        <div id="ratingButtons" class="mt-4" style="display: none;">
+            <h5>How well did you know this?</h5>
+            <form method="post" asp-page-handler="Rate">
+                <input type="hidden" name="reviewId" value="@Model.CurrentReview.FlashcardReviewID" />
+                <div class="btn-group">
+                    <button type="submit" name="quality" value="0" class="btn btn-danger">Forgot</button>
+                    <button type="submit" name="quality" value="2" class="btn btn-warning">Hard</button>
+                    <button type="submit" name="quality" value="3" class="btn btn-info">Good</button>
+                    <button type="submit" name="quality" value="5" class="btn btn-success">Easy</button>
+                </div>
+            </form>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function flipCard() {
+            document.getElementById('cardFront').style.display = 'none';
+            document.getElementById('cardBack').style.display = 'block';
+            document.getElementById('ratingButtons').style.display = 'block';
+        }
+    </script>
+}

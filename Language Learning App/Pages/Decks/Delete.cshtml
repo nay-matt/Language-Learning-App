@@ -1,0 +1,23 @@
+﻿@page "{id:int}"
+@model Language_Learning_App.Pages.Decks.DeleteModel
+
+<h3>Are you sure you want to delete this deck?</h3>
+<div class="alert alert-danger">
+    <strong>Warning!</strong> Deleting this deck will also delete all flashcards inside it.
+</div>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Title</dt>
+        <dd class="col-sm-10">@Model.Deck.Name</dd>
+        
+        <dt class="col-sm-2">Language</dt>
+        <dd class="col-sm-10">@Model.Deck.Language?.Name</dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Deck.DeckID" />
+        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+        <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

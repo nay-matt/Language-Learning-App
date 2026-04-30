@@ -1,0 +1,25 @@
+﻿@page "{id:int}"
+@model Language_Learning_App.Pages.Decks.EditModel
+
+<h1>Edit Deck</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="Deck.DeckID" />
+    
+    <div class="form-group mb-3">
+        <label>Deck Name</label>
+        <input asp-for="Deck.Name" class="form-control" />
+        <span asp-validation-for="Deck.Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Language</label>
+        <select asp-for="Deck.LanguageID" asp-items="Model.LanguageList" class="form-control">
+            <option value="">-- Select Language --</option>
+        </select>
+        <span asp-validation-for="Deck.LanguageID" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+</form>
