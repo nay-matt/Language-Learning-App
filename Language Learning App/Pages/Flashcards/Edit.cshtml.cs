@@ -15,10 +15,14 @@ namespace Language_Learning_App.Pages.Flashcards
 
         [BindProperty]
         public Flashcard Flashcard { get; set; }
-        public string TagInput { get; set; } = string.Empty;
+
+        public List<Tag> AllTags { get; set; }
+
+        [BindProperty]
+        public string TagString { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null) return NotFound();
 
             Flashcard = await _context.Flashcards
                 .Include(f => f.Tags)
@@ -26,16 +30,16 @@ namespace Language_Learning_App.Pages.Flashcards
 
             if (Flashcard == null) return NotFound();
 
-            TagInput = string.Join(", ", Flashcard.Tags.Select(t => t.Name));
+            TagString = string.Join(", ", Flashcard.Tags.Select(t => t.Name));
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int id)
+        public async Task<IActionResult> OnPostAsync()
         {
             var cardToUpdate = await _context.Flashcards
                 .Include(f => f.Tags)
-                .FirstOrDefaultAsync(f => f.FlashcardID == id);
+                .FirstOrDefaultAsync(f => f.FlashcardID == Flashcard.FlashcardID);
 
             if (cardToUpdate == null) return NotFound();
 
@@ -44,14 +48,15 @@ namespace Language_Learning_App.Pages.Flashcards
 
             cardToUpdate.Tags.Clear();
 
-            if (!string.IsNullOrWhiteSpace(TagInput))
+            if (!string.IsNullOrWhiteSpace(TagString))
             {
-                var tagNames = TagInput.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                var tagNames = TagString.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                        .Select(t => t.Trim());
+
                 foreach (var name in tagNames)
                 {
-                    var trimmedName = name.Trim();
-                    var tag = await _context.Tags.FirstOrDefaultAsync(t => t.Name == trimmedName)
-                              ?? new Tag { Name = trimmedName };
+                    var tag = await _context.Tags.FirstOrDefaultAsync(t => t.Name == name)
+                              ?? new Tag { Name = name };
 
                     cardToUpdate.Tags.Add(tag);
                 }

@@ -33,7 +33,11 @@
                                 @item.CardsDueToday
                             </span>
                         </p>
-                        <a asp-page="/Flashcards/Index" asp-route-deckId="@item.DeckID" class="btn btn-primary btn-sm">View Cards</a>
+                        <a asp-page="/Flashcards/Index" asp-route-deckId="@item.DeckID" class="btn btn-primary btn-sm">View Cards
+                        </a>
+                        <a asp-page="/Study" asp-route-deckId="@item.DeckID" class="btn btn-success">
+                            Study This Deck
+                        </a>
                     </div>
                 </div>
             </div>

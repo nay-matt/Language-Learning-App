@@ -17,26 +17,20 @@
             <input type="hidden" asp-for="Flashcard.FlashcardID" />
             <input type="hidden" asp-for="Flashcard.DeckID" />
 
-            <div class="form-group mb-3">
-                <label asp-for="Flashcard.FrontText" class="control-label font-weight-bold"></label>
-                <input asp-for="Flashcard.FrontText" class="form-control" placeholder="Enter front text (e.g., Bonjour)" />
-                <span asp-validation-for="Flashcard.FrontText" class="text-danger"></span>
+            <div class="form-group">
+                <label>Front Text</label>
+                <input asp-for="Flashcard.FrontText" class="form-control" />
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Flashcard.BackText" class="control-label font-weight-bold"></label>
-                <input asp-for="Flashcard.BackText" class="form-control" placeholder="Enter translation (e.g., Hello)" />
-                <span asp-validation-for="Flashcard.BackText" class="text-danger"></span>
+            <div class="form-group">
+                <label>Back Text</label>
+                <input asp-for="Flashcard.BackText" class="form-control" />
             </div>
 
-            <div class="form-group mb-4">
-                <label asp-for="Flashcard.Difficulty" class="control-label"></label>
-                <select asp-for="Flashcard.Difficulty" class="form-control">
-                    <option value="1">Easy</option>
-                    <option value="2">Medium</option>
-                    <option value="3">Hard</option>
-                </select>
-                <span asp-validation-for="Flashcard.Difficulty" class="text-danger"></span>
+            <div class="form-group mt-3">
+                <label asp-for="TagString" class="control-label">Tags (separated by commas)</label>
+                <input asp-for="TagString" class="form-control" placeholder="e.g. Chemistry, Acids, Midterm" />
+                <span class="text-muted small">Separate tags with a comma. New tags will be created automatically.</span>
             </div>
 
             <div class="form-group">

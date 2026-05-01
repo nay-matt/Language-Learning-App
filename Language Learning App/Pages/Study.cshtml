@@ -4,44 +4,85 @@
     ViewData["Title"] = "Study Session";
 }
 
-<div class="container text-center mt-5">
-    @if (Model.CurrentReview == null)
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary">Study Mode</h2>
+        @if (Model.DeckId.HasValue)
+        {
+            <a asp-page="/Study" asp-route-deckId="" class="btn btn-outline-secondary">← Change Deck</a>
+        }
+    </div>
+
+    @if (!Model.DeckId.HasValue)
     {
-        <div class="alert alert-success">
-            <h3>🎉 You're all caught up!</h3>
-            <p>No more cards due for review today.</p>
-            <a asp-page="/Index" class="btn btn-primary">Back Home</a>
+        <div class="text-center bg-light p-5 rounded-3 border">
+            <h4 class="mb-4">Select a subject to practice</h4>
+            <div class="row justify-content-center">
+                @foreach (var deck in Model.AvailableDecks)
+                {
+                    <div class="col-md-4 mb-3">
+                        <a asp-page="/Study" asp-route-deckId="@deck.DeckID" class="btn btn-primary btn-lg w-100 shadow-sm py-3">
+                            @deck.Name
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else if (Model.CurrentReview == null)
+    {
+        <div class="text-center py-5">
+            <div class="card p-5 border-success bg-light shadow-sm">
+                <h3 class="text-success">🎉 Excellent Work!</h3>
+                <p class="lead">You have finished all the due cards in this deck.</p>
+                <div class="mt-3">
+                    <a asp-page="/Study" asp-route-deckId="" class="btn btn-primary">Study Another Deck</a>
+                </div>
+            </div>
         </div>
     }
     else
     {
-        <p class="text-muted">Cards remaining: @Model.RemainingCount</p>
-
-        @* Flashcard UI *@
-        <div class="card mx-auto shadow-lg" style="max-width: 500px; min-height: 300px; cursor: pointer;" onclick="flipCard()">
-            <div class="card-body d-flex align-items-center justify-content-center">
-                <div id="cardFront">
-                    <h2 class="display-4">@Model.CurrentReview.Flashcard.FrontText</h2>
-                    <p class="text-muted mt-3">(Click to flip)</p>
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <div class="mb-3">
+                    <span class="badge bg-dark px-3 py-2">Cards Remaining: @Model.RemainingCount</span>
                 </div>
-                <div id="cardBack" style="display: none;">
-                    <h2 class="display-4 text-primary">@Model.CurrentReview.Flashcard.BackText</h2>
+
+                <div class="card shadow-lg border-0" style="min-height: 380px; border-radius: 20px;">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        
+                        <div id="cardFront">
+                            <small class="text-muted text-uppercase fw-bold">Prompt</small>
+                            <h1 class="display-2 my-4">@Model.CurrentReview.Flashcard.FrontText</h1>
+                            <button type="button" class="btn btn-primary btn-lg mt-4 px-5 rounded-pill" onclick="flipCard()">
+                                Show Answer
+                            </button>
+                        </div>
+
+                        <div id="cardBack" style="display: none;">
+                            <small class="text-primary text-uppercase fw-bold">Correct Answer</small>
+                            <h1 class="display-2 text-primary my-4">@Model.CurrentReview.Flashcard.BackText</h1>
+                            
+                            <div class="mt-5 pt-4 border-top">
+                                <p class="text-muted">How difficult was this?</p>
+                                <form method="post" asp-page-handler="Rate">
+                                    <input type="hidden" name="reviewId" value="@Model.CurrentReview.FlashcardReviewID" />
+                                    <input type="hidden" name="deckId" value="@Model.DeckId" />
+                                    
+                                    <div class="btn-group w-100 mt-2">
+                                        <button type="submit" name="quality" value="1" class="btn btn-danger py-3">Again</button>
+                                        <button type="submit" name="quality" value="3" class="btn btn-warning py-3 text-white">Hard</button>
+                                        <button type="submit" name="quality" value="4" class="btn btn-success py-3">Good</button>
+                                        <button type="submit" name="quality" value="5" class="btn btn-primary py-3">Easy</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-        </div>
-
-        @* Rating Buttons (Hidden until flipped) *@
-        <div id="ratingButtons" class="mt-4" style="display: none;">
-            <h5>How well did you know this?</h5>
-            <form method="post" asp-page-handler="Rate">
-                <input type="hidden" name="reviewId" value="@Model.CurrentReview.FlashcardReviewID" />
-                <div class="btn-group">
-                    <button type="submit" name="quality" value="0" class="btn btn-danger">Forgot</button>
-                    <button type="submit" name="quality" value="2" class="btn btn-warning">Hard</button>
-                    <button type="submit" name="quality" value="3" class="btn btn-info">Good</button>
-                    <button type="submit" name="quality" value="5" class="btn btn-success">Easy</button>
-                </div>
-            </form>
         </div>
     }
 </div>
@@ -51,7 +92,6 @@
         function flipCard() {
             document.getElementById('cardFront').style.display = 'none';
             document.getElementById('cardBack').style.display = 'block';
-            document.getElementById('ratingButtons').style.display = 'block';
         }
     </script>
 }
