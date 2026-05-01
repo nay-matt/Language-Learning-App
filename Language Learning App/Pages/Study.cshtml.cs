@@ -48,7 +48,7 @@ namespace Language_Learning_App.Pages
 
             RemainingCount = await query.CountAsync();
 
-\            CurrentReview = await query.OrderBy(r => Guid.NewGuid()).FirstOrDefaultAsync();
+            CurrentReview = await query.OrderBy(r => Guid.NewGuid()).FirstOrDefaultAsync();
 
             return Page();
         }
